@@ -1,6 +1,6 @@
 # 🪟✟ Windows Terminal — Glassmorphism Setup
 
-<img width="2698" height="1463" alt="image" src="https://github.com/user-attachments/assets/33e60e97-dfba-44e7-8ea5-5e5e48d9b5e7" />
+![Windows Terminal glassmorphism preview](https://github.com/user-attachments/assets/33e60e97-dfba-44e7-8ea5-5e5e48d9b5e7)
 
 A fancy, iOS-style **glassmorphism** Windows Terminal config: frosted acrylic blur,
 [Catppuccin Mocha](https://github.com/catppuccin/catppuccin) colors, the
@@ -11,6 +11,8 @@ A fancy, iOS-style **glassmorphism** Windows Terminal config: frosted acrylic bl
 
 > Built and tested on **Windows 11 (25H2)** with **Windows Terminal 1.24** and
 > **Windows PowerShell 5.1**.
+>
+> An optional **PowerShell 7** Glass profile is also included (see below).
 
 ---
 
@@ -59,7 +61,19 @@ winget install --id junegunn.fzf --exact            # fuzzy finder used by PSFzf
 > The Nerd Font registers under the family name **`JetBrainsMono NF`** (Windows
 > truncates the long Nerd Font name). That's the `face` value used in the config.
 
-For the **git completion + fuzzy search** block, also install these PowerShell modules
+For PowerShell 7 (optional), install it alongside Windows PowerShell 5.1:
+
+```powershell
+winget install --id Microsoft.PowerShell --exact
+```
+
+Restart Windows Terminal after installation and check `pwsh -NoProfile -Command '$PSVersionTable.PSVersion'`.
+
+For the **git completion + fuzzy search** block, run the following module
+installation commands **inside each shell you intend to use** (5.1 and/or 7).
+The shells use different user module directories.
+
+Also install these PowerShell modules
 (`CurrentUser` scope, no admin needed):
 
 ```powershell
@@ -90,8 +104,24 @@ copy oh-my-posh\catppuccin_mocha.omp.json "$env:USERPROFILE\.config\oh-my-posh\c
 
 ### 3. Wire fastfetch into your PowerShell profile
 
-Append the contents of `powershell/profile-snippet.ps1` to your `$PROFILE`
-(see paths inside that file).
+In each shell you use, run `$PROFILE` to find its actual profile path.
+Windows PowerShell 5.1 normally uses `Documents\WindowsPowerShell`;
+PowerShell 7 normally uses `Documents\PowerShell`. Documents may be redirected
+(for example to OneDrive), so use `$PROFILE` instead of hard-coding a path.
+
+From the repository root, create the profile only if it does not exist:
+
+```powershell
+New-Item -ItemType Directory -Force (Split-Path -Parent $PROFILE) | Out-Null
+if (-not (Test-Path -LiteralPath $PROFILE)) {
+    New-Item -ItemType File -Path $PROFILE | Out-Null
+}
+notepad $PROFILE
+```
+
+Append `powershell/profile-snippet.ps1` once, preserving existing customizations.
+Repeat inside the other shell if you use both. The same snippet supports both;
+`oh-my-posh init pwsh` is intentional for both Windows PowerShell 5.1 and 7.
 
 ### 4. ⚠️ Turn ON Windows "Transparency effects" — REQUIRED for the blur
 
@@ -107,7 +137,27 @@ effects are enabled. Without it, the terminal shows as a solid color.
 
 ### 5. Restart Windows Terminal
 
-Open the **✟ Catppuccin Glass** profile (it's the default).
+Open **PowerShell · Catppuccin Glass** (Windows PowerShell 5.1, still the default).
+
+To use PowerShell 7, open **Windows Terminal Settings → Open JSON file** and find
+**PowerShell 7 · Catppuccin Glass** in that installed settings file. Change its
+`"hidden": true` to `false`, save, and select it from the new-tab menu.
+
+This is the settings file you copied to in step 2, normally
+`%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json`.
+Editing the repository copy after copying it does not update the installed
+settings. The PowerShell 7 profile is hidden by default to keep an optional
+entry out of the menu until you install `pwsh.exe` and enable it.
+
+To make it the default, set `defaultProfile` to
+`{f1a2b3c4-0007-4aaa-bbbb-000000000007}` in that same installed settings file,
+or choose it under Settings → Startup → Default profile after enabling it.
+
+In the new tab, check `$PSVersionTable.PSVersion` (major version 7) and `$PROFILE`.
+If `pwsh.exe` is not found, restart Terminal after installing PowerShell 7 and
+check `Get-Command pwsh`. If necessary, set this profile's `commandline` to your
+installed executable's quoted full path. If the prompt or completion is missing,
+check the profile and modules in that shell.
 
 ---
 

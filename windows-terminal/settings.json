@@ -197,6 +197,22 @@
                 "hidden": false,
                 "name": "Git Bash",
                 "source": "Git"
+            },
+            {
+                "colorScheme": "Catppuccin Mocha",
+                "commandline": "pwsh.exe",
+                "guid": "{f1a2b3c4-0007-4aaa-bbbb-000000000007}",
+                "hidden": true,
+                "icon": "✟",
+                "name": "PowerShell 7 · Catppuccin Glass",
+                "opacity": 55,
+                "padding": "20",
+                "tabColor": "#1E1E2E",
+                "unfocusedAppearance":
+                {
+                    "opacity": 55,
+                    "useAcrylic": true
+                }
             }
         ]
     },

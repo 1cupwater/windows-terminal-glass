@@ -1,8 +1,11 @@
 # Add these blocks to your PowerShell profile ($PROFILE).
 #
-# Windows PowerShell 5.1 profile path:
+# Run $PROFILE in each shell for the actual path (Documents may be redirected).
+# Install the required modules in each shell and append this snippet once per profile.
+#
+# Windows PowerShell 5.1 profile path (typical):
 #   C:\Users\<you>\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
-# PowerShell 7+ profile path:
+# PowerShell 7+ profile path (typical):
 #   C:\Users\<you>\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 #
 # Requires (see README): fastfetch, eza, oh-my-posh, the JetBrainsMono Nerd Font,
@@ -79,6 +82,7 @@ if (Get-Command fzf -ErrorAction SilentlyContinue) {
 
 # >>> oh-my-posh prompt >>>
 # Styled, git-aware prompt using the bundled Catppuccin Mocha theme.
+# The Oh My Posh shell identifier 'pwsh' applies to both PowerShell 5.1 and 7.
 if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     oh-my-posh init pwsh --config "$env:USERPROFILE\.config\oh-my-posh\catppuccin_mocha.omp.json" | Invoke-Expression
 }
